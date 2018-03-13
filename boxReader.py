@@ -3,14 +3,11 @@ import imaplib
 import os
 import re
 import pathlib
-import threading
-import time
 
 
 class BoxReader:
     imap = None
     root = None
-    saveTicsFunc = None
 
     def __init__(self, email, password, mail_server='imap.gmail.com', root='./tmp'):
 
@@ -68,48 +65,30 @@ class BoxReader:
 
         return self
 
-    def savelasts(self, rm, nm=10, one_call=False):
-        def fn():
-            rv, data = self.imap.search(None, "ALL")
+    def savelasts(self, rm, nm=10):
 
-            regex = re.compile(rm)
-
-            
-            until = int(next(reversed(data[0].split()))) - nm
-
-            for num in reversed(data[0].split()):
-
-                rv, data = self.imap.fetch(num, '(RFC822)')
-
-                msg = email.message_from_bytes(data[0][1])
-
-                self.saveatt(msg, regex)
-
-                if int(num) == until:
-                    break
-
-            return self
+        rv, data = self.imap.search(None, "ALL")
         
-        if one_call:
-            return fn
-        else:
-            self.saveTicsFunc = fn
-            return self
+        regex = re.compile(rm)
 
-
-    def startloop(self, t=10):
-        if self.saveTicsFunc:
-            def loop():
-                while True:
-                    time.sleep(t)
-                    self.saveTicsFunc()
-
-            th = threading.Timer(0, loop)
-            th.start()
         
+        until = int(next(reversed(data[0].split()))) - nm
+
+        for num in reversed(data[0].split()):
+
+            rv, data = self.imap.fetch(num, '(RFC822)')
+
+            msg = email.message_from_bytes(data[0][1])
+
+            self.saveatt(msg, regex)
+
+            if int(num) == until:
+                break
+
         return self
 
 
+    
 
     def saveatt(self, msg, regex):
         subj = str(email.header.make_header(
@@ -133,8 +112,7 @@ class BoxReader:
             file = part.get_payload(decode=True)
 
             if filename.endswith('.xml'):
-                file = file.decode('unicode_escape').replace(
-                    '\x00', '').encode('utf-8')
+                file = file.decode('unicode_escape').replace('\x00', '').encode('utf-8')
 
             if not os.path.isfile(att_path):
                 fp = open(att_path, 'wb')

@@ -1,4 +1,5 @@
 import os
+import time
 from boxReader import BoxReader
 
 
@@ -13,8 +14,13 @@ REGEX = "NFe - [0-9]{8} - "
 if __name__ == "__main__":
     
     box = BoxReader(EMAIL, PASS, root=ROOT).setbox('Notas')
-    
-    box.savelasts(REGEX, 1, one_call=True)()
+
+    while True:
+        print("while")
+        box.savelasts(REGEX)
+        time.sleep(10)
+
+
     
 
 
