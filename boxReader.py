@@ -99,6 +99,8 @@ class BoxReader:
                 fp.write(file)
                 fp.close()
 
+        print("e-mail {} salvo".format(subj))
+
     def close(self):
         self.imap.logout()
         return self
