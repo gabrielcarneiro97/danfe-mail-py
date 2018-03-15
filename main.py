@@ -21,7 +21,7 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
 
     while True:
-        box.savelasts(REGEX, nm=210)
+        box.savelasts(REGEX, nm=20)
         time.sleep(SLEEP)
     
     box.close()
