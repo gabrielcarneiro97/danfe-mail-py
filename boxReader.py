@@ -6,11 +6,30 @@ import pathlib
 from logger import Logger
 
 class BoxReader:
+    """classe BoxReader.
+    
+    Classe que mantem o leitor de caixas de e-mail.
+
+    Attributes:
+        imap (:obj:`imaplib.IMAP4_SSL`): objeto responsável por fazer a conexão IMAP com o servidor de e-mail.
+        root (str): contém o diretório onde os anexos serão salvos.
+        log (:obj:`Logger`): objeto que contém o logger do sistema.
+    """
     imap = None
     root = None
     log = None
 
     def __init__(self, email, password, mail_server='imap.gmail.com', root='./tmp'):
+        """Metodo __init__ da classe BoxReader.
+        
+        Metodo de inicialização da classe.
+
+        Args:
+            email (str): contém o endereço do e-mail que será acessado.
+            password (str): contém a senha do e-mail que será acessado.
+            mail_server (str): contém o servidor que será acessado. Default é o Google.
+            root (str): contém o caminho onde os anexos serão salvos. Default é './tmp'.
+        """
         self.root = root
         self.imap = imaplib.IMAP4_SSL(mail_server)
         pathlib.Path(root).mkdir(parents=True, exist_ok=True)
