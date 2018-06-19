@@ -94,11 +94,14 @@ class BoxReader:
 
     def saveatt(self, msg, regex):
         subj = str(email.header.make_header(email.header.decode_header(msg['Subject'])))
-        folder_name = regex.sub('', subj)
+        folder_name = regex.search(subj).group(1)
 
         for part in msg.walk():
 
             if part.get_content_maintype() == 'multipart':
+                continue
+
+            if part.get_content_maintype() == 'text':
                 continue
 
             if part.get('Content-Disposition') is None:
