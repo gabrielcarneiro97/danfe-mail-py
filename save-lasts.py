@@ -27,9 +27,10 @@ if len(sys.argv) == 1:
 else:
   search = sys.argv[1]
 
-if sys.argv[2] == 'aut':
-  boxAut.savelasts(REGEX_AUT, nm=int(search))
-elif sys.argv[2] == 'rv':
-  boxRv.savelasts(REGEX_RV, nm=int(search))
+if len(sys.argv) >= 3:
+  if sys.argv[2] == 'aut':
+    boxAut.savelasts(REGEX_AUT, nm=int(search))
+  elif sys.argv[2] == 'rv':
+    boxRv.savelasts(REGEX_RV, nm=int(search))
 else:
   boxCar.savelasts(REGEX_CAR, nm=int(search))
